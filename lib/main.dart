@@ -64,8 +64,11 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline,
-                        size: 48, color: Colors.red),
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
+                    ),
                     const SizedBox(height: 8),
                     const Text(
                       'Zadatke trenutno nije moguće dohvatiti. '
@@ -106,8 +109,9 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
                         title: Text(
                           z.naslov,
                           style: TextStyle(
-                            decoration:
-                                z.zavrsen ? TextDecoration.lineThrough : null,
+                            decoration: z.zavrsen
+                                ? TextDecoration.lineThrough
+                                : null,
                           ),
                         ),
                       );

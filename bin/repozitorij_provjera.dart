@@ -26,8 +26,10 @@ Future<void> main() async {
   final stoperica = Stopwatch()..start();
   final rezultati = await Future.wait([repo2.dohvati(), repo2.dohvati()]);
   stoperica.stop();
-  print('Future.wait: ${rezultati.length} dohvata, '
-      'trajanje ${stoperica.elapsedMilliseconds} ms');
+  print(
+    'Future.wait: ${rezultati.length} dohvata, '
+    'trajanje ${stoperica.elapsedMilliseconds} ms',
+  );
 
   // Samostalna izmjena 2: timeout od 300 ms
   try {
