@@ -38,6 +38,15 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
     });
   }
 
+  Future<void> _osvjezi() async {
+    _ponovi();
+    try {
+      await _buduci;
+    } catch (_) {
+      // Pogrešku već prikazuje FutureBuilder.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,18 +59,26 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
           }
           if (snap.hasError) {
             return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 8),
-                  Text('${snap.error}'),
-                  const SizedBox(height: 8),
-                  FilledButton(
-                    onPressed: _ponovi,
-                    child: const Text('Pokušaj ponovno'),
-                  ),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline,
+                        size: 48, color: Colors.red),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Zadatke trenutno nije moguće dohvatiti. '
+                      'Provjerite internetsku vezu i pokušajte ponovno.',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    FilledButton(
+                      onPressed: _ponovi,
+                      child: const Text('Pokušaj ponovno'),
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -69,22 +86,40 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
           if (zadaci.isEmpty) {
             return const Center(child: Text('Nema zadataka'));
           }
-          return ListView.builder(
-            itemCount: zadaci.length,
-            itemBuilder: (context, i) {
-              final z = zadaci[i];
-              return ListTile(
-                leading: Icon(
-                  z.zavrsen ? Icons.check_circle : Icons.radio_button_unchecked,
-                ),
-                title: Text(
-                  z.naslov,
-                  style: TextStyle(
-                    decoration: z.zavrsen ? TextDecoration.lineThrough : null,
+          final zavrseno = zadaci.where((z) => z.zavrsen).length;
+          return Column(
+            children: [
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _osvjezi,
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: zadaci.length,
+                    itemBuilder: (context, i) {
+                      final z = zadaci[i];
+                      return ListTile(
+                        leading: Icon(
+                          z.zavrsen
+                              ? Icons.check_circle
+                              : Icons.radio_button_unchecked,
+                        ),
+                        title: Text(
+                          z.naslov,
+                          style: TextStyle(
+                            decoration:
+                                z.zavrsen ? TextDecoration.lineThrough : null,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              );
-            },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text('Završeno: $zavrseno od ${zadaci.length}'),
+              ),
+            ],
           );
         },
       ),
