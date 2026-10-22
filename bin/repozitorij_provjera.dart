@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_print
+import 'dart:async';
+
 import 'package:zadatci_app/repozitorij.dart';
 
 Future<void> main() async {
@@ -17,5 +19,21 @@ Future<void> main() async {
     } finally {
       print('Pokušaj $pokusaj završen');
     }
+  }
+
+  // Samostalna izmjena 1: dva dohvata istovremeno s Future.wait
+  final repo2 = ZadatakRepozitorij();
+  final stoperica = Stopwatch()..start();
+  final rezultati = await Future.wait([repo2.dohvati(), repo2.dohvati()]);
+  stoperica.stop();
+  print('Future.wait: ${rezultati.length} dohvata, '
+      'trajanje ${stoperica.elapsedMilliseconds} ms');
+
+  // Samostalna izmjena 2: timeout od 300 ms
+  try {
+    await repo2.dohvati().timeout(const Duration(milliseconds: 300));
+    print('Dohvat uspio');
+  } on TimeoutException {
+    print('Isteklo vrijeme');
   }
 }
