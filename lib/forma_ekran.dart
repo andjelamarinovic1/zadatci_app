@@ -66,6 +66,11 @@ void _spremi() {
  ),
  const SizedBox(height: 8),
  FilledButton(onPressed: _spremi, child: const Text('Spremi')),
+ const SizedBox(height: 8),
+OutlinedButton(
+  onPressed: () => Navigator.pop(context),
+  child: const Text('Odustani'),
+),
  ],
  ),
  ),

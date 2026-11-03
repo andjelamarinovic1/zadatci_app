@@ -32,6 +32,7 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
  _zadaci
  ..clear()
  ..addAll(podaci);
+ if (mounted) setState(() {});
  }
  void _ponovi() {
  setState(() {
@@ -51,7 +52,7 @@ class _ZadatciEkranState extends State<ZadatciEkran> {
  @override
  Widget build(BuildContext context) {
  return Scaffold(
- appBar: AppBar(title: const Text('Zadatci')),
+ appBar: AppBar(title: Text('Zadatci (${_zadaci.length})')),
  floatingActionButton: FloatingActionButton(
  onPressed: _dodaj,
  tooltip: 'Novi zadatak',
